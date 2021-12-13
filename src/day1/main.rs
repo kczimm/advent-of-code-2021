@@ -10,7 +10,8 @@ fn main() -> io::Result<()> {
 
     let report = Report::try_from(buf.as_str()).expect("parsing input failed");
 
-    println!("part1: {}", report.num_increases());
+    println!("part1: {}", report.num_increases(1));
+    println!("part2: {}", report.num_increases(3));
 
     Ok(())
 }
@@ -22,12 +23,14 @@ struct Report {
 }
 
 impl Report {
-    fn num_increases(&self) -> usize {
+    fn num_increases(&self, window_size: usize) -> usize {
+        assert!(window_size > 0, "window size must be positive");
+
         let mut num = 0;
 
-        if self.measurements.len() > 1 {
-            for i in 1..self.measurements.len() {
-                if (self.measurements[i] - self.measurements[i - 1]) > 0 {
+        if self.measurements.len() > window_size {
+            for i in window_size..self.measurements.len() {
+                if (self.measurements[i] - self.measurements[i - window_size]) > 0 {
                     num += 1;
                 }
             }
@@ -56,9 +59,7 @@ impl TryFrom<&str> for Report {
 mod tests {
     use crate::Report;
 
-    #[test]
-    fn number_of_increases() {
-        let input = "199
+    const INPUT: &'static str = "199
 200
 208
 210
@@ -68,8 +69,19 @@ mod tests {
 269
 260
 263";
-        let report = Report::try_from(input).unwrap();
 
-        assert_eq!(report.num_increases(), 7);
+    #[test]
+    fn number_of_increases_window_size_1() {
+        let report = Report::try_from(INPUT).unwrap();
+        let window_size = 1;
+        assert_eq!(report.num_increases(window_size), 7);
+    }
+
+    #[test]
+    fn number_of_increases_window_size_3() {
+        let report = Report::try_from(INPUT).unwrap();
+
+        let window_size = 3;
+        assert_eq!(report.num_increases(window_size), 5);
     }
 }
