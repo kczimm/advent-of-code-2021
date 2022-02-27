@@ -28,23 +28,15 @@ impl Bingo {
         let drawn = parts.next().unwrap();
         let drawn = drawn.split(',').map(|n| n.parse().unwrap()).collect();
 
-        let boards = parts.map(|p| Board::new(p)).collect();
+        let boards = parts.map(Board::new).collect();
 
         Self { drawn, boards }
     }
 
     fn play(&self) -> Number {
         for i in 1..self.drawn.len() {
-            match self
-                .boards
-                .iter()
-                .filter_map(|b| b.score(&self.drawn[0..i]))
-                .next()
-            {
-                Some(score) => {
-                    return score;
-                }
-                None => {}
+            if let Some(score) = self.boards.iter().find_map(|b| b.score(&self.drawn[0..i])) {
+                return score;
             }
         }
         0
@@ -94,7 +86,7 @@ impl Board {
 
     pub fn score(&self, drawn: &[Number]) -> Option<Number> {
         let marked = self.find_marked(drawn);
-        if self.has_complete_row(&marked) || self.has_complete_col(&marked) {
+        if Self::has_complete_row(&marked) || Self::has_complete_col(&marked) {
             let sum: Number = self
                 .numbers
                 .iter()
@@ -119,7 +111,7 @@ impl Board {
         marked
     }
 
-    fn has_complete_row(&self, marked: &[bool]) -> bool {
+    fn has_complete_row(marked: &[bool]) -> bool {
         for row in 0..Self::ROWS {
             let i = row * Self::COLS;
             let j = i + Self::COLS;
@@ -132,7 +124,7 @@ impl Board {
         false
     }
 
-    fn has_complete_col(&self, marked: &[bool]) -> bool {
+    fn has_complete_col(marked: &[bool]) -> bool {
         for col in 0..Self::COLS {
             let found = (col..Self::ROWS * Self::COLS)
                 .step_by(Self::ROWS)

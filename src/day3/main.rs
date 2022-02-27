@@ -15,11 +15,11 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
-type OxygenGeneratorRating = usize;
-type CO2ScrubberRating = usize;
+type _OxygenGeneratorRating = usize;
+type _CO2ScrubberRating = usize;
 
-fn calculate_oxygen_generator_rating(report: &str) -> OxygenGeneratorRating {
-    let mut binary_numbers = report.lines().into_iter().collect::<Vec<&str>>();
+fn _calculate_oxygen_generator_rating(report: &str) -> _OxygenGeneratorRating {
+    let binary_numbers = report.lines().into_iter().collect::<Vec<&str>>();
 
     let numbers_len = binary_numbers.len();
     assert!(numbers_len > 0, "report has no lines");
@@ -27,7 +27,10 @@ fn calculate_oxygen_generator_rating(report: &str) -> OxygenGeneratorRating {
     let bit_depth = binary_numbers[0].len();
 
     for i in 0..bit_depth {
-        let num_ones = binary_numbers.iter().filter(|number| number.chars().nth(i).unwrap() == '1').count();
+        let _num_ones = binary_numbers
+            .iter()
+            .filter(|number| number.chars().nth(i).unwrap() == '1')
+            .count();
     }
 
     0
@@ -39,7 +42,7 @@ type EpsilonRate = usize;
 fn calculate_rates(report: &str) -> (GammaRate, EpsilonRate) {
     let mut position_counts = Vec::new();
     let mut numbers = 0;
-    for binary_number in report.lines().into_iter() {
+    for binary_number in report.lines() {
         for (i, c) in binary_number.chars().enumerate() {
             if position_counts.len() < i + 1 {
                 position_counts.push(0);
@@ -56,9 +59,11 @@ fn calculate_rates(report: &str) -> (GammaRate, EpsilonRate) {
     let mut epsilon_rate: EpsilonRate = 0;
 
     for (i, count) in position_counts.iter().rev().enumerate() {
-        if *count > numbers / 2 { // most common bit is 1
+        if *count > numbers / 2 {
+            // most common bit is 1
             gamma_rate += 1 << i;
-        } else { // least common bit is 1
+        } else {
+            // least common bit is 1
             epsilon_rate += 1 << i;
         }
     }

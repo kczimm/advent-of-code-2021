@@ -5,7 +5,7 @@ use std::{
 };
 
 fn main() -> io::Result<()> {
-    const BOILER_PLATE: &'static str = r#"fn main() {
+    const BOILER_PLATE: &str = r#"fn main() {
     println!("Hello, world!");
 }
 

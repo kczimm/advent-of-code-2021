@@ -1,3 +1,5 @@
+#![deny(clippy::all, clippy::pedantic)]
+
 use std::{
     fs::File,
     io::{self, Read},
@@ -10,19 +12,23 @@ fn main() -> io::Result<()> {
 
     let report = Report::try_from(buf.as_str()).expect("parsing input failed");
 
-    println!("part1: {}", report.num_increases(1));
-    println!("part2: {}", report.num_increases(3));
+    let num_increases = report.num_increases(1);
+    println!("part1: {num_increases}");
+    let num_increases = report.num_increases(3);
+    println!("part2: {num_increases}");
 
     Ok(())
 }
 
 type Depth = i64;
 
+/// The sonar sweep [Report] contains measurements of the sea floor [Depth] as the sweep looks further and further away from the submarine.
 struct Report {
     measurements: Vec<Depth>,
 }
 
 impl Report {
+    /// Count the number of times a [Depth] measurement increases from the previous `window_size` measurements.
     fn num_increases(&self, window_size: usize) -> usize {
         assert!(window_size > 0, "window size must be positive");
 
@@ -59,7 +65,7 @@ impl TryFrom<&str> for Report {
 mod tests {
     use crate::Report;
 
-    const INPUT: &'static str = "199
+    const INPUT: &str = "199
 200
 208
 210
