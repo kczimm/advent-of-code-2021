@@ -20,16 +20,17 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
-type Depth = i64;
+/// A sonar sweep measurement of [Depth].
+pub type Depth = i64;
 
 /// The sonar sweep [Report] contains measurements of the sea floor [Depth] as the sweep looks further and further away from the submarine.
-struct Report {
+pub struct Report {
     measurements: Vec<Depth>,
 }
 
 impl Report {
     /// Count the number of times a [Depth] measurement increases from the previous `window_size` measurements.
-    fn num_increases(&self, window_size: usize) -> usize {
+    pub fn num_increases(&self, window_size: usize) -> usize {
         assert!(window_size > 0, "window size must be positive");
 
         let mut num = 0;
