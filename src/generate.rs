@@ -17,6 +17,7 @@ fn main() -> io::Result<()> {
     let mut buf = String::new();
     f.read_to_string(&mut buf)?;
 
+    Ok(())
 }
 
 #[cfg(test)]
