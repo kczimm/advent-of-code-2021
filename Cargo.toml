@@ -111,3 +111,4 @@ name = "day25"
 path = "src/day25/main.rs"
 
 [dependencies]
+thiserror = "1.0"
